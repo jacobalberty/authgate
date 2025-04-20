@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/signal"
 	"strings"
 
 	"github.com/jacobalberty/authgate/internal/client/peers"
@@ -21,14 +22,18 @@ func main() {
 }
 
 func start(ctx context.Context, in io.Reader, args []string) error {
-	var (
-		filename = "squidgate.json"
-	)
+	ctx, cancel := signal.NotifyContext(ctx, os.Interrupt)
+	defer cancel()
+
+	// Default filename for the configuration file
+	// This can be overridden by passing a filename as the first argument
+	filename := "squidgate.json"
 
 	if len(args) > 0 {
 		filename = args[0]
 	}
 
+	// Load the configuration from the specified file
 	config, err := loadConfig(filename)
 	if err != nil {
 		return err
