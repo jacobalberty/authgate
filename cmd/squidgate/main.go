@@ -47,33 +47,40 @@ func start(ctx context.Context, in io.Reader, args []string) error {
 
 	scanner := bufio.NewScanner(in)
 	for scanner.Scan() {
-		line := scanner.Text()
-		if line == "" {
-			continue
-		}
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		default:
+			line := scanner.Text()
+			if line == "" {
+				continue
+			}
 
-		parts := strings.Fields(line)
-		if len(parts) != 2 {
-			fmt.Println("ERR")
-			continue
-		}
+			parts := strings.Fields(line)
+			if len(parts) != 2 {
+				fmt.Println("ERR")
+				continue
+			}
 
-		group, ip := parts[0], parts[1]
-		ok, err := nb.IsPeerInGroup(ctx, group, ip)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "error checking group:", err)
-			fmt.Println("ERR")
-			continue
-		}
+			group, ip := parts[0], parts[1]
+			ok, err := nb.IsPeerInGroup(ctx, group, ip)
+			if err != nil {
+				fmt.Fprintln(os.Stderr, "error checking group:", err)
+				fmt.Println("ERR")
+				continue
+			}
 
-		if ok {
-			fmt.Println("OK")
-		} else {
-			fmt.Println("ERR")
+			if ok {
+				fmt.Println("OK")
+			} else {
+				fmt.Println("ERR")
+			}
+
+			if err := scanner.Err(); err != nil {
+				return err
+			}
+
 		}
-	}
-	if err := scanner.Err(); err != nil {
-		fmt.Fprintln(os.Stderr, "helper read error:", err)
 	}
 	return nil
 }
