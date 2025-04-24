@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  # 1) namespace anchor with intercept rules
+  netns:
+    build: ./netns
+    cap_add: [ NET_ADMIN ]
+
+  # 2) Squid + squidgate binary
+  squid:
+    image: ghcr.io/jacobalberty/squid-docker:v6.12
+    network_mode: "service:netns"
+    restart: always
+    cap_add: [ NET_BIND_SERVICE ]
+    volumes:
+      - ./squid/conf:/conf
+      - ./squid/spool:/var/spool/squid
+      - ./squid/ssl_db:/var/spool/squid/ssl_db
+      - ./squid/log:/var/log/squid
+      - ./squidgate/squidgate:/usr/local/bin/squidgate:ro
+      - ./squidgate/squidgate.json:/etc/squidgate.json:ro
+    depends_on: [ netns ]
+
+  # 3) NetBird agent as exit node
+  netbird:
+    image: netbirdio/netbird:latest
+    network_mode: "service:netns"
+    cap_add: [ NET_ADMIN ]
+    environment:
+      - NB_TOKEN=YOUR_SERVICE_TOKEN
+    depends_on: [ netns ]
