@@ -27,26 +27,30 @@ go build -o squidgate
 
    ```conf
    external_acl_type group_acl ttl=30 %DATA %SRC /usr/local/bin/squidgate /path/to/squidgate.json
-   
+
    # Define VPN groups
    acl allow_internet external group_acl allow-internet
    acl admin          external group_acl admin
 
    # Define a blocklist for allow-internet users
    acl blocklist dstdomain "/etc/squid/blocklist.txt"
-   
+
    # Access rules:
    # 1) Admins get full access
    http_access allow admin
 
    # 2) allow_internet users get all except blocklist
-   http_access deny blocklist allow allow_internet
+   http_access deny blocklist allow_internet
    http_access allow allow_internet
 
    # 3) Deny all others
    http_access deny all
    ```
 
+## Advanced Usage
+
+- **Intercept Proxy Setup**: End-to-end guide combining `squidgate` with an intercepting Squid proxy under NetBird — see [Intercept-Proxy Quick-Start guide](squidgate/intercept.md).
+
 ## License
 
-BSD 3-Clause License © Jacob AlbertyMIT © Jacob Alberty
+BSD 3-Clause License © Jacob Alberty
