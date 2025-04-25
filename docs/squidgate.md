@@ -49,8 +49,8 @@ go build -o squidgate
 
 ## Advanced Usage
 
-- **Transparent Proxy Setup**: End-to-end guide combining `squidgate` with a transparent Squid proxy under NetBird — see [Transparent-Proxy Quick-Start guide](squidgate/transparent.md).
+- **Intercept Proxy Setup**: End-to-end guide combining `squidgate` with an intercepting Squid proxy under NetBird — see [Intercept-Proxy Quick-Start guide](squidgate/intercept.md).
 
 ## License
 
-BSD 3-Clause License © Jacob Alberty
+BSD 3-Clause License © Jacob Alberty

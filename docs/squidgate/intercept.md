@@ -1,6 +1,6 @@
-# Squidgate + Docker — Transparent-Proxy Quick-Start
+# Squidgate + Docker — Intercept-Proxy Quick-Start
 
-A complete guide to run **squidgate** with a transparent Squid proxy for NetBird peers, providing three policy levels:
+A complete guide to run **squidgate** with an intercepting Squid proxy for NetBird peers, providing three policy levels:
 
 | Tag                | Client capabilities                                                     |
 |--------------------|------------------------------------------------------------------------|
@@ -31,7 +31,7 @@ infra/
     ├── squidgate             # compiled Go binary
     └── squidgate.json        # NetBird API token config
 ```
-Adapt paths if you clone from `examples/transparent`; the structure must match your volume mounts.
+Adapt paths if you clone from `examples/intercept`; the structure must match your volume mounts.
 
 ---
 
@@ -62,7 +62,7 @@ ENTRYPOINT ["/bin/sh","/intercept-rules.sh"]
 ## 3  Squid Configuration
 Edit **`squid/conf/squid.conf`**:
 ```conf
-### Transparent Listeners
+### Intercept Listeners
 http_port 3129 intercept
 https_port 3130 intercept ssl-bump \
     cert=/etc/squid/ssl_db/ca.pem \
@@ -158,7 +158,7 @@ openssl dhparam -out ./squid/conf/dhparam.pem 2048
 2. Click the **⋮ menu** next to the desired peer and select **Set Up Exit Node**.
 3. Choose or create a **Distribution Group**, then add peers to it.
 
-Those peers’ Internet traffic will now flow through the transparent Squid proxy.
+Those peers’ Internet traffic will now flow through the intercepting Squid proxy.
 
 ---
 
