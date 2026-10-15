@@ -4,6 +4,10 @@
 
 A Squid external‑ACL helper in Go that checks user access with NetBird’s Zero Trust VPN by verifying peer IP and group membership. It returns `OK` or `ERR` for ACL enforcement.
 
+## Install
+
+Prebuilt binaries for Linux, FreeBSD and macOS (amd64/arm64) are attached to each [GitHub release](https://github.com/jacobalberty/authgate/releases), along with a `checksums.txt` file.
+
 ## Build
 
 ```bash
