@@ -10,6 +10,8 @@ Prebuilt binaries for Linux, FreeBSD and macOS (amd64/arm64) are attached to eac
 
 ## Build
 
+Requires Go 1.26 or newer.
+
 ```bash
 cd cmd/squidgate
 go build -o squidgate
