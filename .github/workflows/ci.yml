@@ -15,20 +15,13 @@ concurrency:
 
 jobs:
   test:
-    name: test (go ${{ matrix.go }})
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        go:
-          - oldstable
-          - stable
     steps:
       - uses: actions/checkout@v7
 
       - uses: actions/setup-go@v7
         with:
-          go-version: ${{ matrix.go }}
+          go-version-file: go.mod
 
       - name: Check formatting
         run: test -z "$(gofmt -l . | tee /dev/stderr)"
@@ -42,6 +35,26 @@ jobs:
 
       - run: go test -race ./...
 
+  gofix:
+    name: go fix is clean
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          check-latest: true
+      - name: Run go fix
+        run: go fix ./...
+      - name: Fail if go fix changed anything
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::'go fix ./...' produced changes. Run it locally and commit the result."
+            git status --short
+            git --no-pager diff
+            exit 1
+          fi
+
   goreleaser:
     runs-on: ubuntu-latest
     steps:
@@ -51,7 +64,7 @@ jobs:
 
       - uses: actions/setup-go@v7
         with:
-          go-version: stable
+          go-version-file: go.mod
 
       - uses: goreleaser/goreleaser-action@v7
         with:

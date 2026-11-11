@@ -6,6 +6,14 @@ updates:
       interval: weekly
     commit-message:
       prefix: chore(deps)
+    groups:
+      go-minor-patch:
+        update-types: [minor, patch]
+      go-security:
+        # Security updates ignore version-update groups; group them too so one
+        # merge does not force a go.sum rebase on the others.
+        applies-to: security-updates
+        patterns: ["*"]
 
   - package-ecosystem: github-actions
     directory: /
@@ -14,6 +22,5 @@ updates:
     commit-message:
       prefix: chore(ci)
     groups:
-      github-actions:
-        patterns:
-          - "*"
+      actions-minor-patch:
+        update-types: [minor, patch]
