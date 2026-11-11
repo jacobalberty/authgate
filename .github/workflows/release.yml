@@ -37,7 +37,7 @@ jobs:
       - name: Compute next semver from conventional commits
         id: semver
         if: github.event_name == 'workflow_dispatch' && inputs.version == ''
-        uses: paulhatch/semantic-version@v6.0.5
+        uses: paulhatch/semantic-version@v6.0.7
         with:
           tag_prefix: "v"
           major_pattern: "/^[a-z]+(\\(.+\\))?!:|BREAKING[ -]CHANGE/"
