@@ -15,20 +15,13 @@ concurrency:
 
 jobs:
   test:
-    name: test (go ${{ matrix.go }})
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        go:
-          - oldstable
-          - stable
     steps:
       - uses: actions/checkout@v7
 
       - uses: actions/setup-go@v7
         with:
-          go-version: ${{ matrix.go }}
+          go-version-file: go.mod
 
       - name: Check formatting
         run: test -z "$(gofmt -l . | tee /dev/stderr)"
@@ -51,7 +44,7 @@ jobs:
 
       - uses: actions/setup-go@v7
         with:
-          go-version: stable
+          go-version-file: go.mod
 
       - uses: goreleaser/goreleaser-action@v7
         with:
